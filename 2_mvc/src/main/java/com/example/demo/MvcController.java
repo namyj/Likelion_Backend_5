@@ -20,6 +20,17 @@ public class MvcController {
         return "hits";
     }
 
+    @RequestMapping("/lotto")
+    public String lotto(Model model) {
+        List<Integer> listOfNums = new ArrayList<>();
+        for (int i = 0; i < 6; i++) {
+            listOfNums.add((int) (Math.random() * 60));
+        }
+
+        model.addAttribute("listOfNums", listOfNums);
+        return "lotto";
+    }
+
     @RequestMapping("/")
     public String home(Model model) {
         model.addAttribute(
