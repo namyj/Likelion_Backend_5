@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Items: For each</title>
+</head>
+<body>
+  <div>
+    <h2>Item List</h2>
+    <p th:each="item: ${listOfStrings}">[[${item}]]</p>
+  </div>
+  <h2>Student List</h2>
+  <div th:each="student: ${studentList}">
+    <p>name: [[${student.name}]]</p>
+    <p>email: [[${student.email}]]</p>
+  </div>
+</body>
+</html>

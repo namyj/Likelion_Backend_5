@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>LogIn</title>
+</head>
+<body>
+  <article th:if="${isLoggedIn}">
+    <p>You are logged in.</p>
+  </article>
+  <article th:unless="${isLoggedIn}">
+    <p>Please Log in.</p>
+  </article>
+</body>
+</html>
