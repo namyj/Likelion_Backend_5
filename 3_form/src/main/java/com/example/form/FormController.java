@@ -7,13 +7,13 @@ import org.springframework.web.bind.annotation.*;
 public class FormController {
     @RequestMapping("/")
     public String home() {
-        return "home.html";
+        return "home";
     }
 
     // @RequestMapping(value="/send", method = RequestMethod.GET)
     @GetMapping("/send")
     public String getForm() {
-        return "send.html";
+        return "send";
     }
 
     // @RequestMapping(method = RequestMethod.POST,value="/receive")
@@ -21,6 +21,6 @@ public class FormController {
     public String receive(@RequestParam("msg") String msg, @RequestParam("email") String email) {
         System.out.println(msg);
         System.out.println(email);
-        return "send.html";
+        return "send";
     }
 }
