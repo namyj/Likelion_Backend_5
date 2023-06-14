@@ -30,6 +30,7 @@ public class StudentService {
 
     // 모든 studentDto 읽기
     public List<StudentDto> readStudentAll() {
+        System.out.println(studentList.toString());
         return studentList;
     }
     
@@ -41,6 +42,41 @@ public class StudentService {
 
         return null;
     }
-    
+
+    public StudentDto readStudent2(Long id) {
+        return studentList
+                .stream()
+                .filter(studentDto -> studentDto.getId().equals(id))
+                .findFirst()
+                .orElse(null);
+    }
+
+    // 학생 데이터 갱신
+    public StudentDto updateStudent(Long id, String name, String email) {
+        StudentDto targetDto = this.readStudent(id);
+        if(targetDto != null) {
+            targetDto.setName(name);
+            targetDto.setEmail(email);
+            return targetDto;
+        } else return null;
+    }
+
+    // 학생 데이터 삭제
+    public boolean deleteStudent(Long id) {
+        int target = -1;
+        // 학생 인덱스 검색
+        for (int i = 0; i < studentList.size(); i++) {
+            if (studentList.get(i).getId().equals(id)) {
+                target = i;
+                break;
+            }
+        }
+
+        // 학생 삭제
+        if (target > -1) {
+            studentList.remove(target);
+            return true;
+        } else return false;
+    }
 
 }
