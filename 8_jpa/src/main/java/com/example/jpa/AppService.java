@@ -1,9 +1,11 @@
 package com.example.jpa;
 
+import com.example.jpa.entities.StudentDto;
 import com.example.jpa.entities.StudentEntity;
 import com.example.jpa.repos.StudentRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,8 +47,15 @@ public class AppService {
     }
 
     // read all
-    public void readStudentAll() {
-        System.out.println(this.studentRepository.findAll());
+    public List<StudentDto> readStudentAll() {
+        List<StudentDto> studentDtoList = new ArrayList<>();
+
+        // studentRepository에서 모든 StudentEntity를 읽어서 studentEntityList에 저장
+        for (StudentEntity studentEntity : this.studentRepository.findAll()) {
+            studentDtoList.add(StudentDto.fromEntity(studentEntity));
+        }
+
+        return studentDtoList;
     }
 
     // update

@@ -1,15 +1,28 @@
 package com.example.jpa;
 
+import com.example.jpa.entities.StudentDto;
+import com.example.jpa.entities.StudentEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
+@RequestMapping("/students")
 public class AppController {
     private final AppService service;
 
     public AppController(AppService service) {
         this.service = service;
+    }
+
+    @GetMapping("home")
+    public String home(Model model) {
+        model.addAttribute("studentList", service.readStudentAll());
+        return "home";
     }
 
     @GetMapping("create")
@@ -25,9 +38,8 @@ public class AppController {
     }
 
     @GetMapping("read-all")
-    public @ResponseBody String readAll() {
-        this.service.readStudentAll();
-        return "done-read-all";
+    public @ResponseBody List<StudentDto> readAll() {
+        return this.service.readStudentAll();
     }
 
 
