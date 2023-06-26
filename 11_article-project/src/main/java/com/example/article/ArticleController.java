@@ -1,8 +1,10 @@
 package com.example.article;
 
 import com.example.article.dto.ArticleDto;
+import com.example.article.entity.ArticleEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,9 +25,13 @@ public class ArticleController {
     }
 
     // GET /articles
+    // 페이징 적용
     @GetMapping
-    public List<ArticleDto> readAll() {
-        return service.readArticleAll();
+    public Page<ArticleDto> readAll(
+            @RequestParam("page") Integer page,
+            @RequestParam("size") Integer size
+    ) {
+        return service.readArticlePages(page, size);
     }
 
     // GET /articles/{id}
@@ -48,4 +54,14 @@ public class ArticleController {
     public void delete(@PathVariable("id") Long id) {
         service.deleteArticle(id);
     }
+
+    @GetMapping("/search")
+    public Page<ArticleDto> search(
+            @RequestParam("query") String query,
+            @RequestParam(value = "page", defaultValue = "0") Integer pageNumber
+    ) {
+        return service.searchArticle(query, pageNumber);
+    }
+
+
 }

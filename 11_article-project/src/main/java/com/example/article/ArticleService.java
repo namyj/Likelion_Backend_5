@@ -3,6 +3,10 @@ package com.example.article;
 import com.example.article.dto.ArticleDto;
 import com.example.article.entity.ArticleEntity;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -64,5 +68,20 @@ public class ArticleService {
         if (optionalArticle.isPresent()) {
             repository.delete(optionalArticle.get());
         } else throw new ResponseStatusException(HttpStatus.NOT_IMPLEMENTED);
+    }
+
+    // 페이징 메서드
+    public Page<ArticleDto> readArticlePages(Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
+        Page<ArticleEntity> articleEntityPage = repository.findAll(pageable);
+
+        Page<ArticleDto> articleDtoPage = articleEntityPage.map(ArticleDto::fromEntity);
+        return articleDtoPage;
+    }
+
+    public Page<ArticleDto> searchArticle(String query, Integer pageNumber) {
+        Pageable pageable = PageRequest.of(pageNumber, 20, Sort.by("id").descending());
+        return repository.findAllByTitleContains(query, pageable)
+                .map(ArticleDto::fromEntity);
     }
 }
