@@ -37,7 +37,7 @@ public class ItemService {
         newItem.setDescription(itemDto.getDescription());
         newItem.setMinPriceWanted(itemDto.getMinPriceWanted());
         newItem.setWriter(itemDto.getWriter());
-        newItem.setImageUrl(itemDto.getImageUrl());
+        // newItem.setImageUrl(itemDto.getImageUrl()); // 필수 아님
         newItem.setPassword(itemDto.getPassword());
         newItem.setStatus("판매중");
 
@@ -154,6 +154,7 @@ public class ItemService {
         ItemEntity itemEntity = optionalItemEntity.get();
 
         if (itemEntity.getWriter().equals(writer) && itemEntity.getPassword().equals(password) ) {
+
             repository.deleteById(id);
         } else throw new PasswordNotCorrectException();
 

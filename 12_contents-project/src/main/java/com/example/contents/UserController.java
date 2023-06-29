@@ -6,10 +6,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/users")
+@RequestMapping("/user")
 public class UserController {
 
     private final UserService service;
@@ -21,10 +23,17 @@ public class UserController {
         return service.createUser(userDto);
     }
 
+    // GET /user
+    // 전체 사용자 정보 조회
+    @GetMapping
+    public List<UserDto> read() {
+        return service.readUser();
+    }
+
     // GET /user/{username}
     // 사용자 정보 조회
     @GetMapping("/{username}")
-    public UserDto read(@PathVariable("username") String username) {
+    public UserDto readByUsername(@PathVariable("username") String username) {
         return service.readUserByUsername(username);
     }
 
