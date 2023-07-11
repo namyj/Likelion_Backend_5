@@ -1,4 +1,4 @@
-package com.example.beer;
+package com.example.beer.dto;
 
 import lombok.Data;
 
