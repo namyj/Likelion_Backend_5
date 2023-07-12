@@ -23,6 +23,8 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	// 반응형 웹 의존성 추가
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'

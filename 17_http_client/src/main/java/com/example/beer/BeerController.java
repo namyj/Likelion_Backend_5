@@ -2,6 +2,7 @@ package com.example.beer;
 
 import com.example.beer.dto.BeerDto;
 import com.example.beer.dto.BeerGetDto;
+import com.example.beer.dto.MessageDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -12,7 +13,18 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 public class BeerController {
-    private final BeerRestService service;
+    // RestTemplate 사용
+    // private final BeerRestServiceRestTemplate service;
+    // WebClient
+    private final BeerRestServiceWebClient service;
+
+    // interface DI
+    private final BeerService DIService;
+
+    @GetMapping("/get")
+    public void getBeer() {
+        DIService.drinkBeer();
+    }
 
     @GetMapping("/get-beer-string")
     public String getBeerString() {
@@ -29,9 +41,14 @@ public class BeerController {
         return service.getBeerEntity();
     }
 
-    @PostMapping("/give")
+    @PostMapping("/give-string")
     public void give() {
         service.postBeerString();
+    }
+
+    @PostMapping("/give-entity")
+    public MessageDto giveEntity() {
+        return service.postBeer();
     }
 
     @PostMapping("/give-204")

@@ -2,20 +2,27 @@ package com.example.beer;
 
 import com.example.beer.dto.BeerGetDto;
 import com.example.beer.dto.BeerPostDto;
+import com.example.beer.dto.MessageDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 
 @Slf4j
 @Service
-public class BeerRestService {
+public class BeerRestServiceWebClient {
     // Get 요청 > String 응답
     public String getBeerString() {
-        RestTemplate restTemplate = new RestTemplate();
+        WebClient webClient = WebClient.builder().build();
         String url = "https://random-data-api.com/api/v2/beers";
 
-        String responseBody = restTemplate.getForObject(url, String.class);
+        String responseBody = webClient.get()
+                .uri(url) // 요청 경로
+                .header("x-test", "header") // 요청 헤더 추가
+                .retrieve()  
+                .bodyToMono(String.class) // 응답의 body 정의
+                .block(); // 동기식 처리
         log.info(responseBody);
 
         return responseBody;
@@ -48,39 +55,50 @@ public class BeerRestService {
 
     // Post > String
     public void postBeerString() {
-        RestTemplate restTemplate = new RestTemplate();
-        String url = "http://localhost:8081/give-me-beer";
-
-        BeerPostDto dto = new BeerPostDto();
-        
-        // post 요청을 보낼 때 requestBody를 같이 전달
-        String reponseBody = restTemplate.postForObject(
-                url, // 요청 url
-                dto, // requestBody
-                String.class // 응답 해석 타입
-        );
-
-        log.info(reponseBody);
     }
 
-    // Post > void
-    public void postBeerVoid() {
-        RestTemplate restTemplate = new RestTemplate();
-
-        // 응답 Body 없이 응답하는 URL
-        String url = "http://localhost:8081/give-me-beer-204";
+    public MessageDto postBeer() {
+        WebClient webClient = WebClient.builder().build();
+        String url = "http://localhost:8081/give-me-beer";
 
         BeerPostDto dto = new BeerPostDto();
         dto.setName("Stella Artois");
         dto.setCc(2000L);
         dto.setAlcohol(5.0);
 
-        ResponseEntity<Void> reponse = restTemplate.postForEntity(
-                url,
-                dto,
-                Void.class
-        );
+        MessageDto responseBody = webClient.post()
+                        .uri(url)
+                        .bodyValue(dto) // requestBody 정의
+                        .retrieve() // 응답 정의 시작
+                        .bodyToMono(MessageDto.class) // 응답 타입 정의
+                        .block(); // 동기식 처리
+
+        log.info(responseBody.toString());
+
+        return responseBody;
+    }
+
+    // Post > void
+    public void postBeerVoid() {
+        WebClient webClient = WebClient.builder().build();
+
+        // 응답 Body 없이 응답하는 URL
+        String url = "http://localhost:8081/give-me-beer-204";
+
+        BeerPostDto dto = new BeerPostDto();
+        // dto.setName("Stella Artois");
+        // dto.setCc(2000L);
+        // dto.setAlcohol(5.0);
+
+        ResponseEntity<Void> reponse = webClient.post()
+                .uri(url)
+                .bodyValue(dto) 
+                .retrieve() 
+                .toBodilessEntity() // 응답 Body가 없을 경우 사용
+                .block(); 
 
         log.info(reponse.getStatusCode().toString());
     }
+
+
 }
