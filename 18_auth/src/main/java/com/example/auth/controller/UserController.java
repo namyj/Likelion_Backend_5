@@ -1,9 +1,9 @@
-package com.example.auth;
+package com.example.auth.controller;
 
+import com.example.auth.entity.CustomUserDetails;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Controller;
@@ -16,11 +16,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping("/users")
 public class UserController {
-    private final UserDetailsManager manager; // 사용자 CRUD 기능 수행
+    private final UserDetailsManager manager;
     private final PasswordEncoder passwordEncoder;
 
-    // 생성자 주입
-    public UserController(UserDetailsManager manager, PasswordEncoder passwordEncoder) {
+
+    public UserController(
+            UserDetailsManager manager,
+            PasswordEncoder passwordEncoder
+    ) {
         this.manager = manager;
         this.passwordEncoder = passwordEncoder;
     }
@@ -35,10 +38,10 @@ public class UserController {
     // 로그인 성공 후
     @GetMapping("my-profile")
     public String myProfile(Authentication authentication) {
-        log.info(authentication.getName());
-        log.info(((User) authentication.getPrincipal()).getUsername());
-        log.info(SecurityContextHolder.getContext().getAuthentication().getName());
-
+        CustomUserDetails userDetails
+                = (CustomUserDetails) authentication.getPrincipal();
+        log.info(userDetails.getUsername());
+        log.info(userDetails.getEmail());
         return "my-profile";
     }
 
@@ -56,10 +59,13 @@ public class UserController {
         if (password.equals(passwordCheck)) {
             log.info("password match!");
 
-            manager.createUser(User.withUsername(username)
+            UserDetails details = CustomUserDetails
+                    .builder()
+                    .username(username)
                     .password(passwordEncoder.encode(password))
-                    .build());
+                    .build();
 
+            manager.createUser(details);
             // 로그인 페이지로 리다이렉트
             return "redirect:/users/login";
         }
