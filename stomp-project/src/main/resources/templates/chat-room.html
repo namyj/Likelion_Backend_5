@@ -39,7 +39,10 @@
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
       console.log('Connected: ' + frame);
-      stompClient.subscribe(`/app/topic/${roomId}`, function (message) {
+
+      // 실시간 채팅시 /topic 으로 변경
+      // 구독 메시지 전송 확인시 /app/topic 으로 변경
+      stompClient.subscribe(`/topic/${roomId}`, function (message) {
         receiveMessage(JSON.parse(message.body));
       });
     });
