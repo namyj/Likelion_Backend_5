@@ -7,7 +7,7 @@ import java.util.List;
 
 @Data
 @Entity
-public class Instructor {
+public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -15,6 +15,9 @@ public class Instructor {
     private String firstName;
     private String lastName;
 
-    @OneToMany(mappedBy = "instructor")
-    private List<Lecture> lectures;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "attending_lectures")
+    private List<Lecture> attending;
+
+
 }
