@@ -1,4 +1,4 @@
-package com.example.tdd;
+package com.example.tdd.dto;
 
 import lombok.Data;
 
