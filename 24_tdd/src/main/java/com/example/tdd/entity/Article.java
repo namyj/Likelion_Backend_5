@@ -1,4 +1,4 @@
-package com.example.tdd;
+package com.example.tdd.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

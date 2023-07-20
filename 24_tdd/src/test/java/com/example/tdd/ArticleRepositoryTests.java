@@ -1,6 +1,7 @@
 package com.example.tdd;
 
-import org.assertj.core.api.Assertions;
+import com.example.tdd.entity.Article;
+import com.example.tdd.repo.ArticleRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,5 +60,4 @@ public class ArticleRepositoryTests {
         assertEquals(1, result2.size());
         assertEquals(0, result3.size());
     }
-
 }

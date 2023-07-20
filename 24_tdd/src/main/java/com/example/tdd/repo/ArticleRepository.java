@@ -1,5 +1,6 @@
-package com.example.tdd;
+package com.example.tdd.repo;
 
+import com.example.tdd.entity.Article;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
