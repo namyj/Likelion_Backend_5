@@ -1,33 +1,38 @@
 package com.example.tdd;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class CalculatorTests {
+    private Calculator calculator;
+
+    @BeforeEach
+    public void init() {
+        calculator = new Calculator();
+    }
+
     // 덧셈 기능
+    // 여러 개 숫자를 더하는 기능
     @Test
     public void additionTest() {
-        Calculator calculator = new Calculator();
 
         assertEquals(5, calculator.add(2, 3));
+        assertEquals(6, calculator.add(1, 2, 3));
         assertNotEquals(5, calculator.add(3, 3));
     }
 
     // 뺄셈 기능
     @Test
     public void subtractionTest() {
-        Calculator calculator = new Calculator();
-
         assertEquals(3, calculator.sub(5, 2));
     }
 
     // 곱셈 기능
     @Test
     public void multipleTest() {
-        Calculator calculator = new Calculator();
-
         assertEquals(6, calculator.mul(2, 3));
     }
 
@@ -36,31 +41,37 @@ public class CalculatorTests {
     // 0으로 나눌 경우, IllegalArgumentException 발생
     @Test
     public void divisionTest() {
-        Calculator calculator = new Calculator();
-
         assertEquals(2, calculator.div(6, 3));
-        assertThrows(IllegalArgumentException.class, () -> {
+
+        Throwable exception = assertThrows(IllegalArgumentException.class, () -> {
             calculator.div(6, 0);
         });
+        assertEquals("division by zero", exception.getMessage());
     }
 
 
     private class Calculator {
-        public int add(int a, int b) {
-            return a + b;
+        public int add(int ...numbers) {
+            int sum = 0;
+            for (int number : numbers) {
+                sum += number;
+            }
+
+            return sum;
         }
 
-        public int sub(int a, int b) {
-            return a - b;
+
+        public int sub(int op1, int op2) {
+            return op1 - op2;
         }
 
-        public int mul(int a, int b) {
-            return a * b;
+        public int mul(int op1, int op2) {
+            return op1 * op2;
         }
 
-        public int div(int a, int b) {
-            if (b == 0) throw new IllegalArgumentException();
-            return a / b;
+        public int div(int op1, int op2) {
+            if (op2 == 0) throw new IllegalArgumentException("division by zero");
+            return op1 / op2;
         }
     }
 }
