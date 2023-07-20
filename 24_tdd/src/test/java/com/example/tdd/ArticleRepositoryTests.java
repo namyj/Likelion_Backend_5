@@ -56,8 +56,8 @@ public class ArticleRepositoryTests {
 
         // then
         assertEquals(2, result1.size());
-        assertEquals(1, result1.size());
-        assertEquals(0, result1.size());
+        assertEquals(1, result2.size());
+        assertEquals(0, result3.size());
     }
 
 }
